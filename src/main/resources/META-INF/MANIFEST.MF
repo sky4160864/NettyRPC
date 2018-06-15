@@ -15,7 +15,6 @@ Class-Path: lib/slf4j-api-1.7.12.jar lib/log4j-api-2.4.1.jar lib/log4j
  n-4.0.38.jar lib/protostuff-core-1.0.8.jar lib/protostuff-api-1.0.8.j
  ar lib/protostuff-runtime-1.0.8.jar lib/protostuff-collectionschema-1
  .0.8.jar lib/objenesis-2.1.jar
-Created-By: Apache Maven 3.3.3
+Created-By: Apache Maven 3.0.5
 Build-Jdk: 1.8.0_45
 Main-Class: com.newlandframework.rpc.boot.RpcServerStarter
-

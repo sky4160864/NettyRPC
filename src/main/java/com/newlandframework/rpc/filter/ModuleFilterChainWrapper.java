@@ -45,13 +45,13 @@ public class ModuleFilterChainWrapper implements Modular {
         return modular.invoke(buildChain(invoker), request);
     }
 
-    private <T> ModuleInvoker<T> buildChain(ModuleInvoker<T> invoker) {
+    private <T> ModuleInvoker<T> buildChain(final ModuleInvoker<T> invoker) {
         ModuleInvoker last = invoker;
 
         if (filters.size() > 0) {
             for (int i = filters.size() - 1; i >= 0; i--) {
-                ChainFilter filter = filters.get(i);
-                ModuleInvoker<T> next = last;
+                final ChainFilter filter = filters.get(i);
+                final ModuleInvoker<T> next = last;
                 last = new ModuleInvoker<T>() {
                     @Override
                     public Object invoke(MessageRequest request) throws Throwable {

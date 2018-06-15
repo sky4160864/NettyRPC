@@ -26,7 +26,7 @@ import com.newlandframework.rpc.model.MessageRequest;
  */
 public class DefaultModular implements Modular {
     @Override
-    public <T> ModuleProvider<T> invoke(ModuleInvoker<T> invoker, MessageRequest request) {
+    public <T> ModuleProvider<T> invoke(final ModuleInvoker<T> invoker, MessageRequest request) {
         return new ModuleProvider<T>() {
             @Override
             public ModuleInvoker<T> getInvoker() {

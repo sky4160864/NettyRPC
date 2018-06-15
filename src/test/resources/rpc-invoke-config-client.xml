@@ -6,6 +6,7 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
     http://www.newlandframework.com/nettyrpc http://www.newlandframework.com/nettyrpc/nettyrpc.xsd">
     <context:property-placeholder location="classpath:rpc-server.properties"/>
+    <!--
     <nettyrpc:reference id="addCalc" interfaceName="com.newlandframework.rpc.services.AddCalculate"
                         protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>
     <nettyrpc:reference id="multiCalc" interfaceName="com.newlandframework.rpc.services.MultiCalculate"
@@ -21,5 +22,10 @@
     <nettyrpc:reference id="cache" interfaceName="com.newlandframework.rpc.services.Cache"
                         protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>
     <nettyrpc:reference id="store" interfaceName="com.newlandframework.rpc.services.Store"
+                        protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>-->
+
+
+    <nettyrpc:reference id="midDatasService" interfaceName="com.newlandframework.rpc.services.ReqMiddleDatasManage"
                         protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>
+
 </beans>

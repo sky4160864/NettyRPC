@@ -97,7 +97,7 @@ public class HashMessageRecvInitializeTask extends AbstractMessageRecvInitialize
         criticalSection.exit(hashKey);
     }
 
-    private int getHashVisitorListIndex(String signatureMethod) {
+    private int getHashVisitorListIndex(final String signatureMethod) {
         int index = 0;
         int size = HashModuleMetricsVisitor.getInstance().getHashModuleMetricsVisitorListSize();
         breakFor:

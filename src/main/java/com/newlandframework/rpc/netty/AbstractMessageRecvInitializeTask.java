@@ -83,7 +83,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
         }
     }
 
-    private Object invoke(MethodInvoker mi, MessageRequest request) throws Throwable {
+    private Object invoke(final MethodInvoker mi, MessageRequest request) throws Throwable {
         if (modular != null) {
             ModuleProvider provider = modular.invoke(new ModuleInvoker() {
 
