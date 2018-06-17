@@ -1,1 +1,2 @@
 http\://www.newlandframework.com/nettyrpc=com.newlandframework.rpc.spring.NettyRpcNamespaceHandler
+http\://www.hac.com/schema/user=com.newlandframework.test.spring.schema.UserNamespaceHandler

@@ -10,7 +10,8 @@
     <!--<context:property-placeholder location="classpath:rpc-client.properties"/>-->
     <bean id="propertyConfigurer" class="com.newlandframework.rpc.spring.PropertyPlaceholder">
         <property name="location">
-            <value>classpath:rpc-client.properties</value>
+            <!--<value>classpath:rpc-client.properties</value>-->
+            <value>file:${user.dir}/rpc-client.properties</value>
         </property>
     </bean>
     <nettyrpc:reference id="midDatasService" interfaceName="com.newlandframework.rpc.services.ReqMiddleDatasManage"

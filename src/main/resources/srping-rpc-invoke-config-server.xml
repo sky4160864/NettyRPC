@@ -6,7 +6,9 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
     http://www.newlandframework.com/nettyrpc http://www.newlandframework.com/nettyrpc/nettyrpc.xsd">
-    <context:property-placeholder location="classpath:rpc-server.properties"/>
+    <!--<context:property-placeholder location="classpath:rpc-server.properties"/>-->
+    <context:property-placeholder location="file:${user.dir}/rpc-server.properties"/>
+
     <!--druid配置-->
     <import resource="classpath:spring-druid.xml"/>
     <bean id="beanFactory" class="com.newlandframework.rpc.spring.BeanFactoryUtils"/>

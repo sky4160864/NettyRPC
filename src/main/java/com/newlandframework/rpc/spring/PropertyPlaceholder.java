@@ -3,6 +3,7 @@ package com.newlandframework.rpc.spring;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.core.io.Resource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Properties;
  * https://www.cnblogs.com/Gyoung/p/5507063.html
  */
 public class PropertyPlaceholder extends PropertyPlaceholderConfigurer {
+
 
     private static Map<String,String> propertyMap;
 
@@ -38,4 +40,9 @@ public class PropertyPlaceholder extends PropertyPlaceholderConfigurer {
             return defualtVal;
         }
     }
+
+    /*public void setLocation(Resource location) {
+        Resource resource = new Resource(System.getProperty("user.dir"));
+        super.setLocation(location);
+    }*/
 }
