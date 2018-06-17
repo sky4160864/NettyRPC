@@ -50,7 +50,11 @@ public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        if(cause.getMessage().contains("远程主机强迫关闭了一个现有的连接")){
+            System.out.println(ctx.channel().remoteAddress().toString()+"远程主机强迫关闭了一个现有的连接");
+        }else{
+            cause.printStackTrace();
+        }
         ctx.close();
     }
 }

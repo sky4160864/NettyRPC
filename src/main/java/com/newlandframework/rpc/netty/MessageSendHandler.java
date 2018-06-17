@@ -15,11 +15,10 @@
  */
 package com.newlandframework.rpc.netty;
 
+import com.newlandframework.rpc.serialize.RpcSerializeProtocol;
+import com.newlandframework.rpc.spring.PropertyPlaceholder;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.*;
 
 import java.net.SocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,6 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.newlandframework.rpc.core.MessageCallBack;
 import com.newlandframework.rpc.model.MessageRequest;
 import com.newlandframework.rpc.model.MessageResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author tangjie<https://github.com/tang-jie>
@@ -36,6 +37,7 @@ import com.newlandframework.rpc.model.MessageResponse;
  * @since 2016/10/7
  */
 public class MessageSendHandler extends ChannelInboundHandlerAdapter {
+    private Logger logger = LoggerFactory.getLogger(MessageSendHandler.class);
 
     private ConcurrentHashMap<String, MessageCallBack> mapCallBack = new ConcurrentHashMap<String, MessageCallBack>();
     private volatile Channel channel;
@@ -71,10 +73,23 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
             callBack.over(response);
         }
     }
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        //logger.info("reconnect...");
+        String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
+        String protocol = PropertyPlaceholder.getProperty("rpc.server.protocol","PROTOSTUFFSERIALIZE");
+        RpcServerLoader.getInstance().load(ipAddr,RpcSerializeProtocol.valueOf(protocol));
+        super.channelInactive(ctx);
+    }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
+        if(cause.getMessage().contains("远程主机强迫关闭了一个现有的连接")){
+            logger.info("远程主机强迫关闭了一个现有的连接...");
+        }else{
+            logger.info(cause.getMessage());
+        }
+        //cause.printStackTrace();
         ctx.close();
     }
 

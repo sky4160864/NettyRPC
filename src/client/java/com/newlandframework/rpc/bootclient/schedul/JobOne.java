@@ -6,7 +6,9 @@ package com.newlandframework.rpc.bootclient.schedul;
 
 import com.newlandframework.rpc.bootclient.RpcClientStart;
 import com.newlandframework.rpc.bootclient.services.ReqDatasManage;
+import com.newlandframework.rpc.services.PersonManage;
 import com.newlandframework.rpc.services.ReqMiddleDatasManage;
+import com.newlandframework.rpc.services.pojo.Person;
 import com.newlandframework.rpc.services.pojo.ReqMiddleDatas;
 import com.newlandframework.rpc.services.pojo.ResMiddleDatas;
 import org.quartz.Job;
@@ -14,6 +16,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
 
@@ -46,6 +49,20 @@ public class JobOne implements Job {
                 logger.error("[RES ERR]{}",rlt.getReq());
             }
         }
+
+        /*//RpcClientStart.ccontext = new ClassPathXmlApplicationContext("classpath:spring-rpc-invoke-config-client-test.xml");
+        PersonManage manage = (PersonManage) RpcClientStart.ccontext.getBean("personManage");
+        Person p = new Person();
+        p.setId(20150811);
+        p.setName("XiaoHaoBaby");
+        p.setAge(1);
+        int result = manage.save(p);
+
+        manage.query(p);
+
+        System.out.println("call pojo rpc result:" + result);
+
+        //RpcClientStart.ccontext.destroy();*/
         logger.info("==========request datas end==========");
 
     }

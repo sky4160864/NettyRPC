@@ -62,13 +62,23 @@ public class MessageSendInitializeTask implements Callable<Boolean> {
                     MessageSendHandler handler = channelFuture.channel().pipeline().get(MessageSendHandler.class);
                     RpcServerLoader.getInstance().setMessageSendHandler(handler);
                 } else {
-                    EventLoop loop = (EventLoop) eventLoopGroup.schedule(new Runnable() {
+                    //EventLoop loop = (EventLoop) eventLoopGroup.schedule(new Runnable() {
+                    eventLoopGroup.schedule(new Runnable() {
                         @Override
                         public void run() {
                             System.out.println("NettyRPC server is down,start to reconnecting to: " + serverAddress.getAddress().getHostAddress() + ':' + serverAddress.getPort());
                             call();
                         }
                     }, RpcSystemConfig.SYSTEM_PROPERTY_CLIENT_RECONNECT_DELAY, TimeUnit.SECONDS);
+
+                    /*System.out.println("Reconnect");
+                    final EventLoop loop = channelFuture.channel().eventLoop();
+                    loop.schedule(new Runnable() {
+                        @Override
+                        public void run() {
+                            call();
+                        }
+                    }, 1L, TimeUnit.SECONDS);*/
                 }
             }
         });

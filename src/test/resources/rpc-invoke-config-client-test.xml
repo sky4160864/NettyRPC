@@ -7,7 +7,7 @@
     http://www.newlandframework.com/nettyrpc http://www.newlandframework.com/nettyrpc/nettyrpc.xsd">
     <context:property-placeholder location="classpath:rpc-server.properties"/>
 
-    <nettyrpc:reference id="addCalc" interfaceName="com.newlandframework.rpc.services.AddCalculate"
+    <!--<nettyrpc:reference id="addCalc" interfaceName="com.newlandframework.rpc.services.AddCalculate"
                         protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>
     <nettyrpc:reference id="multiCalc" interfaceName="com.newlandframework.rpc.services.MultiCalculate"
                         protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>
@@ -26,6 +26,8 @@
 
 
     <nettyrpc:reference id="midDatasService" interfaceName="com.newlandframework.rpc.services.ReqMiddleDatasManage"
-                        protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>
+                        protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>-->
 
+    <nettyrpc:reference id="personManage" interfaceName="com.newlandframework.rpc.services.PersonManage"
+                        protocol="PROTOSTUFFSERIALIZE" ipAddr="${rpc.server.addr}"/>
 </beans>

@@ -28,17 +28,18 @@ import java.net.URL;
  * @blogs http://www.cnblogs.com/jietang/
  * @since 2016/10/7
  */
-public class RpcServerStarterJar {
+public class RpcServerStarter2 {
     public static void main(String[] args) {
-        String user_dir = System.getProperty("user.dir");
-        String file1 = user_dir+"\\system.properties";
-        String file2 = user_dir+"\\spring-druid.xml";
-        String file3 = user_dir+"\\rpc-invoke-config-server.xml";
-        new FileSystemXmlApplicationContext(file2,file3);//生成exe执行程序后，需要用这个
+        new ClassPathXmlApplicationContext("classpath:srping-rpc-invoke-config-server.xml");
+        //String user_dir = System.getProperty("user.dir");
+        //String file1 = user_dir+"\\system.properties";
+        //String file2 = user_dir+"\\spring-druid.xml";
+        //String file3 = user_dir+"\\srping-rpc-invoke-config-server.xml";
+        //new FileSystemXmlApplicationContext(file2,file3);//生成exe执行程序后，需要用这个
 
         //获取jar中xml
-        //URL fileURL=RpcServerStarterJar.class.getResource("/rpc-invoke-config-server.xml");//jar中的类获得jar包中资源文件的路径
-        //new ClassPathXmlApplicationContext("rpc-invoke-config-server.xml");
+        //URL fileURL=RpcServerStarter2.class.getResource("/srping-rpc-invoke-config-server.xml");//jar中的类获得jar包中资源文件的路径
+        //new ClassPathXmlApplicationContext("srping-rpc-invoke-config-server.xml");
     }
 }
 

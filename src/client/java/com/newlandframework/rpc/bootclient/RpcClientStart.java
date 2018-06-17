@@ -18,6 +18,7 @@ import java.nio.channels.FileLock;
 public class RpcClientStart {
     private static FileOutputStream fos;
     public static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-rpc-client-config.xml");
+    //public static ClassPathXmlApplicationContext ccontext = new ClassPathXmlApplicationContext("classpath:spring-rpc-invoke-config-client-test.xml");
     public static void main(String[] args) {
         init();
         QuartzUtil.jobStart();

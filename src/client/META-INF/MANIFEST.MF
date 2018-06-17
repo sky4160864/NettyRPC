@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Class-Path: slf4j-api-1.7.21.jar spring-context-support-4.1.1.RELEASE.
+ jar commons-lang3-3.4.jar cglib-nodep-2.2.jar ojdbc6-11.2.0.1.0.jar l
+ ogback-classic-1.1.7.jar protostuff-core-1.0.8.jar commons-pool2-2.4.
+ 2.jar guava-19.0.jar asm-tree-5.0.3.jar reflectasm-1.10.1.jar commons
+ -logging-1.1.3.jar protostuff-collectionschema-1.0.8.jar spring-conte
+ xt-4.1.1.RELEASE.jar spring-beans-4.1.1.RELEASE.jar aspectjweaver-1.8
+ .2.jar objenesis-2.1.jar commons-collections-3.1.jar spring-tx-4.1.1.
+ RELEASE.jar quartz-2.2.3.jar protostuff-runtime-1.0.8.jar spring-aspe
+ cts-4.1.1.RELEASE.jar c3p0-0.9.1.1.jar asm-commons-5.0.3.jar aopallia
+ nce-1.0.jar hessian-4.0.38.jar asm-5.0.3.jar netty-all-4.0.36.Final.j
+ ar kryo-3.0.3.jar hamcrest-core-1.3.jar spring-aop-4.1.1.RELEASE.jar 
+ druid-1.0.28.jar protostuff-api-1.0.8.jar logback-core-1.1.7.jar spri
+ ng-core-4.1.1.RELEASE.jar minlog-1.3.0.jar spring-expression-4.1.1.RE
+ LEASE.jar spring-jdbc-4.1.1.RELEASE.jar junit-4.12.jar
+Main-Class: com.newlandframework.rpc.bootclient.RpcClientTest
+
