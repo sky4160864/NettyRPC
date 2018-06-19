@@ -21,6 +21,7 @@ import java.io.Serializable;
 public class MiddleData implements Serializable {
     private String mn;
     private String mtime;
+    private String extime;
     private String avgflow;
     private String val1; //气：so2  水：cod
     private String val2; //气：nox  水：nh3
@@ -63,6 +64,14 @@ public class MiddleData implements Serializable {
 
     public void setVal2(String val2) {
         this.val2 = val2;
+    }
+
+    public String getExtime() {
+        return extime;
+    }
+
+    public void setExtime(String extime) {
+        this.extime = extime;
     }
 }
 

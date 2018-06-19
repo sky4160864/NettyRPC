@@ -62,47 +62,50 @@
 
 
     <!--独立日志-->
-    <appender name="fileOneLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--<appender name="fileOneLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <!--要拦截的日志级别-->
+            &lt;!&ndash;要拦截的日志级别&ndash;&gt;
             <level>INFO</level>
-            <!--如果匹配，则允许记录-->
+            &lt;!&ndash;如果匹配，则允许记录&ndash;&gt;
             <onMatch>ACCEPT</onMatch>
-            <!--如果不匹配，则禁止-->
+            &lt;!&ndash;如果不匹配，则禁止&ndash;&gt;
             <onMismatch>DENY</onMismatch>
         </filter>
         <encoder>
             <pattern>%date{HH:mm:ss} - %msg%n</pattern>
         </encoder>
-        <!--滚动策略-->
+        &lt;!&ndash;滚动策略&ndash;&gt;
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--路径-->
+            &lt;!&ndash;路径&ndash;&gt;
             <fileNamePattern>logs/one/one-%d.log</fileNamePattern>
         </rollingPolicy>
-    </appender>
+    </appender>-->
 
     <!--独立日志-->
-    <appender name="fileTwoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+   <!-- <appender name="fileTwoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <!--要拦截的日志级别-->
+            &lt;!&ndash;要拦截的日志级别&ndash;&gt;
             <level>INFO</level>
-            <!--如果匹配，则允许记录-->
+            &lt;!&ndash;如果匹配，则允许记录&ndash;&gt;
             <onMatch>ACCEPT</onMatch>
-            <!--如果不匹配，则禁止-->
+            &lt;!&ndash;如果不匹配，则禁止&ndash;&gt;
             <onMismatch>DENY</onMismatch>
         </filter>
         <encoder>
             <pattern>%date{HH:mm:ss} - %msg%n</pattern>
         </encoder>
-        <!--滚动策略-->
+        &lt;!&ndash;滚动策略&ndash;&gt;
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--路径-->
+            &lt;!&ndash;路径&ndash;&gt;
             <fileNamePattern>logs/two/two-%d.log</fileNamePattern>
         </rollingPolicy>
-    </appender>
+    </appender>-->
 
     <!--<logger name="ch.qos.logback" level="ERROR" />-->
     <logger name="com.alibaba.druid" level="ERROR" />
+    <logger name="org.springframework" level="ERROR" />
+    <logger name="org.quartz" level="ERROR" />
+
 
 
     <!--<logger name="fileOneLog" level="INFO" addtivity="false">

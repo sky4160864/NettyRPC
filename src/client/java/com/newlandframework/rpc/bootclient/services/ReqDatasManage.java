@@ -14,6 +14,9 @@ public interface ReqDatasManage {
     List<ReqMiddleDatas> query01();
     List<ReqMiddleDatas> query09();
 
+    List<ReqMiddleDatas> query21();
+    List<ReqMiddleDatas> query29();
+
     List<ReqMiddleDatas> compare01();
     List<ReqMiddleDatas> compare09();
     int save(ResMiddleDatas datas);
