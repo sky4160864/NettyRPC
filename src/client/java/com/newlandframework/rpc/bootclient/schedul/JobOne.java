@@ -6,9 +6,7 @@ package com.newlandframework.rpc.bootclient.schedul;
 
 import com.newlandframework.rpc.bootclient.RpcClientStart;
 import com.newlandframework.rpc.bootclient.services.ReqDatasManage;
-import com.newlandframework.rpc.services.PersonManage;
 import com.newlandframework.rpc.services.ReqMiddleDatasManage;
-import com.newlandframework.rpc.services.pojo.Person;
 import com.newlandframework.rpc.services.pojo.ReqMiddleDatas;
 import com.newlandframework.rpc.services.pojo.ResMiddleDatas;
 import org.quartz.Job;
@@ -16,7 +14,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
 
@@ -34,8 +31,19 @@ public class JobOne implements Job {
         long btime = System.currentTimeMillis();
         ReqMiddleDatasManage reqManage = (ReqMiddleDatasManage) RpcClientStart.context.getBean("midDatasService");
         ReqDatasManage req = (ReqDatasManage)RpcClientStart.context.getBean("ReqDatasManage");
-        List<ReqMiddleDatas> list = req.query01();
+        logger.info("=====01=====");
+        doReqManage(req.query01(),reqManage,req);
+        logger.info("=====09=====");
+        doReqManage(req.query09(),reqManage,req);
+        logger.info("=====21=====");
+        doReqManage(req.query21(),reqManage,req);
+        logger.info("==========request datas end {}==========",System.currentTimeMillis()-btime);
+    }
+
+    public void doReqManage(List<ReqMiddleDatas> list,ReqMiddleDatasManage reqManage,ReqDatasManage req){
+        if(list==null)return;
         for (int i = 0; i < list.size(); i++) {
+            long btime = System.currentTimeMillis();
             ResMiddleDatas rlt = reqManage.query(list.get(i));
 
             if(rlt.getResult()==1){
@@ -43,27 +51,16 @@ public class JobOne implements Job {
                 if(size>0){
                     req.save(rlt);
                 }
-                logger.info("{}: result:{} size:{} time:{}",rlt.getReq().getMn1(),rlt.getResult(),size,System.currentTimeMillis()-btime);
+                logger.info("ST:{} TP:{} MN:{} RP:{} Bwtime:{} Result:{} Size:{} Cost:{}",
+                        rlt.getReq().getSt(),rlt.getReq().getTp(),
+                        rlt.getReq().getMn1(),rlt.getReq().getMn2(),
+                        rlt.getReq().getBtime()+"-"+rlt.getReq().getEtime(),
+                        rlt.getResult(),size,System.currentTimeMillis()-btime);
 
             }else{
                 logger.error("[RES ERR]{}",rlt.getReq());
             }
         }
-
-        /*//RpcClientStart.ccontext = new ClassPathXmlApplicationContext("classpath:spring-rpc-invoke-config-client-test.xml");
-        PersonManage manage = (PersonManage) RpcClientStart.ccontext.getBean("personManage");
-        Person p = new Person();
-        p.setId(20150811);
-        p.setName("XiaoHaoBaby");
-        p.setAge(1);
-        int result = manage.save(p);
-
-        manage.query(p);
-
-        System.out.println("call pojo rpc result:" + result);
-
-        //RpcClientStart.ccontext.destroy();*/
-        logger.info("==========request datas end==========");
 
     }
 }

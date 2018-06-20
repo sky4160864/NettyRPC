@@ -34,6 +34,16 @@ public class ReqMiddleDatas implements Serializable {
     private String etime;
     private int nums;
 
+    public ReqMiddleDatas(){}
+
+    public ReqMiddleDatas(String st, String tp, String mn1,String btime,String etime){
+        this.st = st;
+        this.tp = tp;
+        this.mn1 = mn1;
+        this.btime = btime;
+        this.etime = etime;
+    }
+
     public int getNums() {
         return nums;
     }
