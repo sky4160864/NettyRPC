@@ -23,6 +23,9 @@ public class QuartzUtil {
 
     public static String JOB1_EXPRESSION = PropertyPlaceholder.getProperty("job1_expression");
     public static String JOB2_EXPRESSION = PropertyPlaceholder.getProperty("job2_expression");
+    public static boolean running = false; //单任务不加锁
+
+
 
     static{
         log.info("===================Quartz===================");
@@ -46,6 +49,7 @@ public class QuartzUtil {
         // 创建一个SchedulerFactory工厂实例
         SchedulerFactory sf = new StdSchedulerFactory();
         // 通过SchedulerFactory构建Scheduler对象
+        //由于使用StdSchedulerFactory（基于properties配置文件创建QuartzScheduler实例），如果在创建SchedulerFactory时没有通过new StdSchedulerFactory().initialize(props)指定特定的配置参数，也没有指定特定的配置文件，则程序使用quartz-2.2.1.jar中org\quartz下的quartz.properties作为默认的配置文件：
         Scheduler sche = sf.getScheduler();
         // 用于描叙Job实现类及其他的一些静态信息，构建一个作业实例
         JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, JOB_GROUP_NAME).build();

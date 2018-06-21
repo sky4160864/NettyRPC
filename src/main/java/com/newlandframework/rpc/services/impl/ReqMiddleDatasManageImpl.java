@@ -96,8 +96,8 @@ public class ReqMiddleDatasManageImpl implements ReqMiddleDatasManage {
         return new ResMiddleDatas(-1,req,null);
     }
 
-    @Override
+    /*@Override
     public ResMiddleDatas compare(ReqMiddleDatas req) {
         return null;
-    }
+    }*/
 }

@@ -3,7 +3,6 @@ package com.newlandframework.rpc.boot;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
-import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;

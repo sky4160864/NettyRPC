@@ -76,6 +76,7 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         //logger.info("reconnect...");
+        RpcServerLoader.getInstance().setMessageSendHandler();
         String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
         String protocol = PropertyPlaceholder.getProperty("rpc.server.protocol","PROTOSTUFFSERIALIZE");
         RpcServerLoader.getInstance().load(ipAddr,RpcSerializeProtocol.valueOf(protocol));

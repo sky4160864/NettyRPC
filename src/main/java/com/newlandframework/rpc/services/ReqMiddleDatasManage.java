@@ -23,5 +23,5 @@ public interface ReqMiddleDatasManage {
 
     ResMiddleDatas query(ReqMiddleDatas req);
 
-    ResMiddleDatas compare(ReqMiddleDatas req);
+    //ResMiddleDatas compare(ReqMiddleDatas req);
 }

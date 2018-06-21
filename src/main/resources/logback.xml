@@ -104,7 +104,7 @@
     <!--<logger name="ch.qos.logback" level="ERROR" />-->
     <logger name="com.alibaba.druid" level="ERROR" />
     <logger name="org.springframework" level="ERROR" />
-    <logger name="org.quartz" level="ERROR" />
+    <!--<logger name="org.quartz" level="ERROR" />-->
 
 
 

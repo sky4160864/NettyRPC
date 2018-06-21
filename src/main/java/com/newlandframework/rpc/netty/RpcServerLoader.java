@@ -111,11 +111,22 @@ public class RpcServerLoader {
         }
     }
 
+    //设置MessageSendHandler后，唤醒handlerStatus
     public void setMessageSendHandler(MessageSendHandler messageInHandler) {
         try {
             lock.lock();
             this.messageSendHandler = messageInHandler;
             handlerStatus.signal();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    //设置MessageSendHandler为空 hjh20180621
+    public void setMessageSendHandler() {
+        try {
+            lock.lock();
+            this.messageSendHandler = null;
         } finally {
             lock.unlock();
         }
@@ -128,6 +139,19 @@ public class RpcServerLoader {
                 connectStatus.await();
             }
             return messageSendHandler;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    //根据messageSendHandler判断是否可以发送消息（MessageSendHandler.channelInactive触发后messageSendHandler设置null） hjh20180621
+    public boolean getMessageSendStatus(){
+        try {
+            lock.lock();
+            if (messageSendHandler == null) {
+                return false;
+            }
+            return true;
         } finally {
             lock.unlock();
         }

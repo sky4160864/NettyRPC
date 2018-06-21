@@ -1,6 +1,7 @@
 package com.newlandframework.rpc.bootclient.services;
 
 
+import com.newlandframework.rpc.services.ReqMiddleDatasManage;
 import com.newlandframework.rpc.services.pojo.ReqMiddleDatas;
 import com.newlandframework.rpc.services.pojo.ResMiddleDatas;
 
@@ -15,9 +16,11 @@ public interface ReqDatasManage {
     List<ReqMiddleDatas> query09();
 
     List<ReqMiddleDatas> query21();
-    List<ReqMiddleDatas> query29();
+    //List<ReqMiddleDatas> query29();
 
-    List<ReqMiddleDatas> compare01();
-    List<ReqMiddleDatas> compare09();
+    List<ReqMiddleDatas> query11();
+    List<ReqMiddleDatas> query19();
+
+    void doReqManage(List<ReqMiddleDatas> list, ReqMiddleDatasManage reqManage);
     int save(ResMiddleDatas datas);
 }
