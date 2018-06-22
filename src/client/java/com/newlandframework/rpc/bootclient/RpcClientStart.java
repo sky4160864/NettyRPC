@@ -15,8 +15,12 @@ public class RpcClientStart {
     //public static ClassPathXmlApplicationContext ccontext = new ClassPathXmlApplicationContext("classpath:spring-rpc-invoke-config-client-test.xml");
     public static void main(String[] args) {
         Bootinit.getInstance();
+        System.out.println("=====VERSION[0.1]=====");
         QuartzUtil.jobStart();
     }
 
-
+    /**
+     * VERSION描述
+     * 
+     */
 }

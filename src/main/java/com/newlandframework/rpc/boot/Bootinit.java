@@ -25,7 +25,6 @@ public class Bootinit {
         FileOutputStream fos;
         String userDir = System.getProperty("user.dir");
         //打印参数
-        System.out.println("程序运行中...");
         //加载Log4j配置
         File logbackFile = new File(userDir+"/logback.xml");
         if (logbackFile.exists()) {
