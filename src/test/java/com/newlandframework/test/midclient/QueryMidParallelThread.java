@@ -54,7 +54,12 @@ public class QueryMidParallelThread implements Runnable {
             signal.await();
             long btime = System.currentTimeMillis();
             ResMiddleDatas rlt = manage.query(qryDatas);
-            logger.info("ST:{} TP:{} MN:{} RP:{} Bwtime:{} Result:{} Size:{} Cost:{}", rlt.getReq().getSt(), rlt.getReq().getTp(), rlt.getReq().getMn1(), rlt.getReq().getMn2(), rlt.getReq().getBtime() + "-" + rlt.getReq().getEtime(), rlt.getResult(), rlt.getList().size(), System.currentTimeMillis() - btime);
+            if (rlt.getResult() == 1) {
+                int size = rlt.getList() == null ? 0 : rlt.getList().size();
+                logger.info("ST:{} TP:{} MN:{} RP:{} Bwtime:{} Result:{} Size:{} Cost:{}", rlt.getReq().getSt(), rlt.getReq().getTp(), rlt.getReq().getMn1(), rlt.getReq().getMn2(), rlt.getReq().getBtime() + "-" + rlt.getReq().getEtime(), rlt.getResult(), size, System.currentTimeMillis() - btime);
+            } else {
+                logger.error("[RES ERR]{}", rlt.getReq());
+            }
 
         } catch (InterruptedException ex) {
             Logger.getLogger(QueryMidParallelThread.class.getName()).log(Level.SEVERE, null, ex);

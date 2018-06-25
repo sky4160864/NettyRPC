@@ -27,7 +27,7 @@ public class QuartzTest {
     public static boolean running = false;
 
     static{
-        log.info("===================Quartz Test===================");
+        log.info("===================Quartz StudentTest===================");
         log.info("==JOB1_EXPRESSION: {}",JOB1_EXPRESSION);
         log.info("==JOB2_EXPRESSION: {}",JOB2_EXPRESSION);
         log.info("============================================");
