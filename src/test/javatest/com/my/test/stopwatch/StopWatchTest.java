@@ -19,11 +19,13 @@ public class StopWatchTest {
         StopWatch sw = new StopWatch();
         CountDownLatch signal = new CountDownLatch(1);
         CountDownLatch finish = new CountDownLatch(parallel);
-        sw.start();
+        //sw.start(); err
         for (int i = 0; i < parallel; i++) {
             new Thread(new Sub(i,signal,finish)).start();
         }
+        TimeUnit.MILLISECONDS.sleep(30);
         signal.countDown();
+        sw.start();
         finish.await();
         sw.stop();
         System.out.println("耗时"+sw.getTime());
@@ -42,9 +44,9 @@ public class StopWatchTest {
         public void run() {
             try {
                 signal.await();
-                int timeout = new Random().nextInt(20);
+                int timeout = new Random().nextInt(2000);
                 System.out.println(Thread.currentThread().getName() +"-"+id+"-sleep:"+timeout);
-                TimeUnit.MILLISECONDS.sleep(timeout*1000);
+                TimeUnit.MILLISECONDS.sleep(timeout);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

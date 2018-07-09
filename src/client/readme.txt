@@ -35,14 +35,26 @@ ST:21企业 29污水处理厂
 5.09测试OK
 
 
-环境配置 EXE4J_HOME
+1.拷贝java版本，环境配置
+    EXE4J_HOME  E:\hac\Java\jre1.8.0_161_x86
 
+2.创建表
 create table SKPW_REPLACE
 (
   old_mn  VARCHAR2(30),
   new_mn  VARCHAR2(30),
   rp_desc VARCHAR2(30)
 );
+
+3.清表  truncate table t_ent_shuru_status
+
+4.停止老服务（hacClientZjhb） 设置为手动
+  注册新服务（hacMidClient）
+
+
+
+
+
 
 
 以下为测试环境需要的表
@@ -76,3 +88,4 @@ create table T_ENT_SHURU_STATUS2
   EXTIME       DATE,
   UPTTIME      DATE
 )
+

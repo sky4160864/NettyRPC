@@ -34,6 +34,7 @@ public class PropertyPlaceholder extends PropertyPlaceholderConfigurer {
         return getProperty(name,null);
     }
     public static String getProperty(String name,String defualtVal) {
+        if(propertyMap==null)return defualtVal;
         if(propertyMap.containsKey(name)){
             return propertyMap.get(name);
         }else{

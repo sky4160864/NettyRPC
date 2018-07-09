@@ -76,10 +76,6 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         //logger.info("reconnect...");
-        RpcServerLoader.getInstance().setMessageSendHandler();
-        String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
-        String protocol = PropertyPlaceholder.getProperty("rpc.server.protocol","PROTOSTUFFSERIALIZE");
-        RpcServerLoader.getInstance().load(ipAddr,RpcSerializeProtocol.valueOf(protocol));
         super.channelInactive(ctx);
     }
 
@@ -87,6 +83,12 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if(cause.getMessage().contains("远程主机强迫关闭了一个现有的连接")){
             logger.info("远程主机强迫关闭了一个现有的连接...");
+            RpcServerLoader.getInstance().setMessageSendHandler();
+            String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
+            String protocol = PropertyPlaceholder.getProperty("rpc.server.protocol","PROTOSTUFFSERIALIZE");
+            if(ipAddr!=null&&protocol!=null){
+                RpcServerLoader.getInstance().load(ipAddr,RpcSerializeProtocol.valueOf(protocol));
+            }
         }else{
             logger.info(cause.getMessage());
         }
