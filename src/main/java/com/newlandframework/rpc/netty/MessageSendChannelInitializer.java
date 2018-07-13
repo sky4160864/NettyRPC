@@ -19,6 +19,9 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import com.newlandframework.rpc.serialize.RpcSerializeProtocol;
+import io.netty.handler.timeout.IdleStateHandler;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author tangjie<https://github.com/tang-jie>
@@ -40,6 +43,7 @@ public class MessageSendChannelInitializer extends ChannelInitializer<SocketChan
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
+        pipeline.addLast("ping", new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS));
         frame.select(protocol, pipeline);
     }
 }

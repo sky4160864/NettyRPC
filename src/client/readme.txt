@@ -89,3 +89,10 @@ create table T_ENT_SHURU_STATUS2
   UPTTIME      DATE
 )
 
+
+
+发现的问题
+1.TCP连接超时，设置testWhileIdle，timeBetweenEvictionRunsMillis值为1分钟 （目前看来正常）
+2.萧山定时10分钟取数据，报错InvokeTimeoutException，是否也是TCP连接超时造成？
+3.客户端都报错InvokeTimeoutException（增加心跳机制IdleStateHandler,客户端每5秒发一次，服务端）
+4.客户端可以多开了。。。

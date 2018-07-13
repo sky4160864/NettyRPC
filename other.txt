@@ -5,3 +5,5 @@ mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2
     <artifactId>ojdbc6</artifactId>
     <version>11.2.0.1.0</version>
 </dependency>
+
+https://www.cnblogs.com/trust-freedom/p/6992952.html

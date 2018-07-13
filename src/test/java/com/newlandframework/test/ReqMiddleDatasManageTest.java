@@ -24,4 +24,13 @@ public class ReqMiddleDatasManageTest {
         ResMiddleDatas rlt = reqManage.query(req);
         System.out.println(rlt.getList().size());
     }
+
+    /*@Test
+    public void testWhileIdle(){
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:rpc-invoke-config-client.xml");
+        ReqMiddleDatasManage reqManage = (ReqMiddleDatasManage) context.getBean("midDatasService");
+        //String rlt = reqManage.testWhileIdle("##sss##");
+        //System.out.println(rlt);
+        //reqManage.testWhileIdle();
+    }*/
 }

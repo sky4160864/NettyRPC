@@ -96,6 +96,13 @@ public class ReqMiddleDatasManageImpl implements ReqMiddleDatasManage {
         return new ResMiddleDatas(-1,req,null);
     }
 
+    /*public String testWhileIdle(String msg){
+        return msg;
+    }
+
+    public void testWhileIdle(){
+    }*/
+
     /*@Override
     public ResMiddleDatas compare(ReqMiddleDatas req) {
         return null;

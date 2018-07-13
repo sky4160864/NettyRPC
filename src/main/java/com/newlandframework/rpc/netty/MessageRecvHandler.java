@@ -15,14 +15,20 @@
  */
 package com.newlandframework.rpc.netty;
 
+import com.newlandframework.rpc.core.RpcSystemConfig;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 import com.newlandframework.rpc.model.MessageRequest;
 import com.newlandframework.rpc.model.MessageResponse;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author tangjie<https://github.com/tang-jie>
@@ -33,20 +39,51 @@ import com.newlandframework.rpc.model.MessageResponse;
  */
 public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
 
+    private Logger logger = LoggerFactory.getLogger(MessageRecvHandler.class);
     private final Map<String, Object> handlerMap;
+    private int loss_connect_time = 0;
 
     public MessageRecvHandler(Map<String, Object> handlerMap) {
         this.handlerMap = handlerMap;
     }
 
     @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        //System.out.println("----userEventTriggered----"+new Date());
+        if (evt instanceof IdleStateEvent) {
+            //System.out.println(loss_connect_time+"----Heart----"+new Date());
+            IdleStateEvent event = (IdleStateEvent) evt;
+            if (event.state() == IdleState.READER_IDLE) {
+                loss_connect_time++;
+                if (loss_connect_time > 2) {
+                    logger.error("[No Heart Close]{}",ctx.channel().remoteAddress().toString());
+                    ctx.channel().close();
+                }
+            }
+        } else {
+            super.userEventTriggered(ctx, evt);
+        }
+    }
+
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         MessageRequest request = (MessageRequest) msg;
+        //心跳
+        if(RpcSystemConfig.HEART_BEAT.equals(request.getClassName())){
+            return;
+        }
         MessageResponse response = new MessageResponse();
         RecvInitializeTaskFacade facade = new RecvInitializeTaskFacade(request, response, handlerMap);
         Callable<Boolean> recvTask = facade.getTask();
         MessageRecvExecutor.submit(recvTask, ctx, request, response);
     }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        logger.info("[channelInactive]{}",ctx.channel().remoteAddress().toString());
+        super.channelInactive(ctx);
+    }
+
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {

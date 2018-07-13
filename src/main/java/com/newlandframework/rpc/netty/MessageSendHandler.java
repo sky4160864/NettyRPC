@@ -15,17 +15,26 @@
  */
 package com.newlandframework.rpc.netty;
 
+import com.newlandframework.rpc.core.RpcSystemConfig;
 import com.newlandframework.rpc.serialize.RpcSerializeProtocol;
 import com.newlandframework.rpc.spring.PropertyPlaceholder;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 
 import java.net.SocketAddress;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.newlandframework.rpc.core.MessageCallBack;
 import com.newlandframework.rpc.model.MessageRequest;
 import com.newlandframework.rpc.model.MessageResponse;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.CharsetUtil;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +47,12 @@ import org.slf4j.LoggerFactory;
  */
 public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     private Logger logger = LoggerFactory.getLogger(MessageSendHandler.class);
+    //private static final ByteBuf HEARTBEAT_SEQUENCE = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("Heartbeat",
+    //        CharsetUtil.UTF_8));
+    private MessageRequest heartBeat = new MessageRequest();
+
+    //private static final int TRY_TIMES = 3;
+    //private int currentTime = 0;
 
     private ConcurrentHashMap<String, MessageCallBack> mapCallBack = new ConcurrentHashMap<String, MessageCallBack>();
     private volatile Channel channel;
@@ -55,12 +70,30 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         this.remoteAddr = this.channel.remoteAddress();
+        heartBeat.setClassName(RpcSystemConfig.HEART_BEAT);
     }
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
         super.channelRegistered(ctx);
         this.channel = ctx.channel();
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        //System.out.println("循环触发时间："+ new Date());
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent event = (IdleStateEvent) evt;
+            if (event.state() == IdleState.WRITER_IDLE) {
+                //if(currentTime <= TRY_TIMES){
+                //    System.out.println(currentTime+"----Heart----"+new Date());
+                //    currentTime++;
+                    ctx.channel().writeAndFlush(heartBeat).addListener(
+                            ChannelFutureListener.CLOSE_ON_FAILURE);
+                //}
+
+            }
+        }
     }
 
     @Override
@@ -75,13 +108,20 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     }
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        //logger.info("reconnect...");
+        logger.info("channelInactive...");
+        RpcServerLoader.getInstance().reLoad();
+       /* RpcServerLoader.getInstance().setMessageSendHandler();
+        String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
+        String protocol = PropertyPlaceholder.getProperty("rpc.server.protocol","PROTOSTUFFSERIALIZE");
+        if(ipAddr!=null&&protocol!=null){
+            RpcServerLoader.getInstance().load(ipAddr,RpcSerializeProtocol.valueOf(protocol));
+        }*/
         super.channelInactive(ctx);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if(cause.getMessage().contains("远程主机强迫关闭了一个现有的连接")){
+        /*if(cause.getMessage().contains("远程主机强迫关闭了一个现有的连接")){
             logger.info("远程主机强迫关闭了一个现有的连接...");
             RpcServerLoader.getInstance().setMessageSendHandler();
             String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
@@ -91,7 +131,8 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
             }
         }else{
             logger.info(cause.getMessage());
-        }
+        }*/
+        logger.info(cause.getMessage());
         //cause.printStackTrace();
         ctx.close();
     }

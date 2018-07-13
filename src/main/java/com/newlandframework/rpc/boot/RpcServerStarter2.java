@@ -26,7 +26,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class RpcServerStarter2 {
     public static void main(String[] args) {
-        Bootinit.getInstance();
+        if(!Bootinit.getInstance().flag){
+            return;
+        }
         new ClassPathXmlApplicationContext("classpath:srping-rpc-invoke-config-server.xml");
     }
 }

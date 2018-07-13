@@ -23,5 +23,9 @@ public interface ReqMiddleDatasManage {
 
     ResMiddleDatas query(ReqMiddleDatas req);
 
+    //String testWhileIdle(String msg);
+
+    //void testWhileIdle();
+
     //ResMiddleDatas compare(ReqMiddleDatas req);
 }

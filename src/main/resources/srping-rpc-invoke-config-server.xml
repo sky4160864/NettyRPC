@@ -10,7 +10,8 @@
     <context:property-placeholder location="file:${user.dir}/rpc-server.properties"/>
 
     <!--druid配置-->
-    <import resource="classpath:spring-druid.xml"/>
+    <import resource="file:${user.dir}/spring-druid.xml"/>
+    <!--<import resource="classpath:spring-druid.xml"/>-->
     <bean id="beanFactory" class="com.newlandframework.rpc.spring.BeanFactoryUtils"/>
 
     <!--HAC STA-->

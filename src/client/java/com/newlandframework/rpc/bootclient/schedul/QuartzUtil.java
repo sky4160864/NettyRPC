@@ -23,6 +23,7 @@ public class QuartzUtil {
 
     public static String JOB1_EXPRESSION = PropertyPlaceholder.getProperty("job1_expression");
     public static String JOB2_EXPRESSION = PropertyPlaceholder.getProperty("job2_expression");
+    //public static String JOB3_EXPRESSION = PropertyPlaceholder.getProperty("job3_expression","0 * * * * ?");
     public static boolean running = false; //单任务不加锁
 
 
@@ -31,6 +32,7 @@ public class QuartzUtil {
         log.info("===================Quartz===================");
         log.info("==JOB1_EXPRESSION: {}",JOB1_EXPRESSION);
         log.info("==JOB2_EXPRESSION: {}",JOB2_EXPRESSION);
+        //log.info("==JOB3_EXPRESSION: {}",JOB3_EXPRESSION);
         log.info("============================================");
     }
     /**
@@ -109,6 +111,7 @@ public class QuartzUtil {
         try {
             QuartzUtil.addJob("job1", "trigger1", JobOne.class,JOB1_EXPRESSION);
             QuartzUtil.addJob("job2", "trigger2", JobTwo.class,JOB2_EXPRESSION);
+            //QuartzUtil.addJob("job3", "trigger3", JobTestWhileIdle.class,JOB3_EXPRESSION);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }

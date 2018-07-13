@@ -46,6 +46,7 @@ public class RpcSystemConfig {
     public static final int SERIALIZE_POOL_MIN_IDLE = 10;
     public static final int SERIALIZE_POOL_MAX_WAIT_MILLIS = 5000;
     public static final int SERIALIZE_POOL_MIN_EVICTABLE_IDLE_TIME_MILLIS = 600000;
+    public static final String HEART_BEAT = "heartbeat";
 
     private static boolean monitorServerSupport = false;
 

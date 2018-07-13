@@ -25,6 +25,7 @@ import com.newlandframework.rpc.serialize.RpcSerializeProtocol;
 import com.newlandframework.rpc.core.RpcSystemConfig;
 import com.newlandframework.rpc.parallel.RpcThreadPool;
 
+import com.newlandframework.rpc.spring.PropertyPlaceholder;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 
@@ -154,6 +155,15 @@ public class RpcServerLoader {
             return true;
         } finally {
             lock.unlock();
+        }
+    }
+
+    public void reLoad(){
+        setMessageSendHandler();
+        String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
+        String protocol = PropertyPlaceholder.getProperty("rpc.server.protocol","PROTOSTUFFSERIALIZE");
+        if(ipAddr!=null&&protocol!=null){
+            load(ipAddr,RpcSerializeProtocol.valueOf(protocol));
         }
     }
 

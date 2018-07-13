@@ -15,13 +15,17 @@
  */
 package com.newlandframework.rpc.netty;
 
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 
+import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.newlandframework.rpc.serialize.RpcSerializeProtocol;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * @author tangjie<https://github.com/tang-jie>
@@ -47,6 +51,13 @@ public class MessageRecvChannelInitializer extends ChannelInitializer<SocketChan
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
+        pipeline.addLast(new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));//心跳
         frame.select(protocol, pipeline);
+
+       /* //心跳
+        socketChannel.eventLoop().scheduleAtFixedRate(() -> {
+            //System.out.println("2 SECONDS....");
+            socketChannel.writeAndFlush(Unpooled.copiedBuffer("##HEART##", Charset.defaultCharset()));
+        },1,1, TimeUnit.MINUTES);*/
     }
 }

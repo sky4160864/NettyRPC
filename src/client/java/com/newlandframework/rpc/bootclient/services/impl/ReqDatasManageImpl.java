@@ -1,6 +1,8 @@
 package com.newlandframework.rpc.bootclient.services.impl;
 
 import com.newlandframework.rpc.bootclient.services.ReqDatasManage;
+import com.newlandframework.rpc.exception.InvokeTimeoutException;
+import com.newlandframework.rpc.netty.RpcServerLoader;
 import com.newlandframework.rpc.services.ReqMiddleDatasManage;
 import com.newlandframework.rpc.services.pojo.MiddleData;
 import com.newlandframework.rpc.services.pojo.ReqMiddleDatas;
@@ -106,21 +108,27 @@ public class ReqDatasManageImpl implements ReqDatasManage {
 
 
     public void doReqManage(List<ReqMiddleDatas> list, ReqMiddleDatasManage reqManage) {
-        if (list == null) return;
-        for (int i = 0; i < list.size(); i++) {
-            long btime = System.currentTimeMillis();
-            ResMiddleDatas rlt = reqManage.query(list.get(i));
-
-            if (rlt.getResult() == 1) {
-                int size = rlt.getList() == null ? 0 : rlt.getList().size();
-                if (size > 0) {
-                    save(rlt);
+        long btime = 0;
+        ReqMiddleDatas reqObj = null;
+        try {
+            if (list == null) return;
+            for (int i = 0; i < list.size(); i++) {
+                btime = System.currentTimeMillis();
+                reqObj = list.get(i);
+                ResMiddleDatas rlt = reqManage.query(reqObj);
+                if (rlt.getResult() == 1) {
+                    int size = rlt.getList() == null ? 0 : rlt.getList().size();
+                    if (size > 0) {
+                        save(rlt);
+                    }
+                    logger.info("ST:{} TP:{} MN:{} RP:{} Bwtime:{} Result:{} Size:{} Cost:{}", rlt.getReq().getSt(), rlt.getReq().getTp(), rlt.getReq().getMn1(), rlt.getReq().getMn2(), rlt.getReq().getBtime() + "-" + rlt.getReq().getEtime(), rlt.getResult(), size, System.currentTimeMillis() - btime);
+                } else {
+                    logger.error("[RES ERR]{}", rlt.getReq());
                 }
-                logger.info("ST:{} TP:{} MN:{} RP:{} Bwtime:{} Result:{} Size:{} Cost:{}", rlt.getReq().getSt(), rlt.getReq().getTp(), rlt.getReq().getMn1(), rlt.getReq().getMn2(), rlt.getReq().getBtime() + "-" + rlt.getReq().getEtime(), rlt.getResult(), size, System.currentTimeMillis() - btime);
-
-            } else {
-                logger.error("[RES ERR]{}", rlt.getReq());
             }
+        }catch (InvokeTimeoutException e){
+            logger.error("[InvokeTimeoutException]{} Cost:{}", reqObj,System.currentTimeMillis() - btime);
+            RpcServerLoader.getInstance().reLoad();
         }
     }
 
