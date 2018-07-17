@@ -6,6 +6,9 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -87,5 +90,10 @@ public class QuartzTest {
         //QuartzUtil.jobStart();
     }
 
+    @Test
+    public void testss() throws InterruptedException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-rpc-client-config.xml");
+        TimeUnit.MILLISECONDS.sleep(10*1000);
+    }
 
 }

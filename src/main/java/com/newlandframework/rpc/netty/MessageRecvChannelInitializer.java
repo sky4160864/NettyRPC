@@ -51,7 +51,7 @@ public class MessageRecvChannelInitializer extends ChannelInitializer<SocketChan
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
-        pipeline.addLast(new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));//心跳
+        pipeline.addLast(new IdleStateHandler(60, 0, 0, TimeUnit.SECONDS));//心跳
         frame.select(protocol, pipeline);
 
        /* //心跳

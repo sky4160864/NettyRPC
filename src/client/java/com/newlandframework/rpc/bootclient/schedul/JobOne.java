@@ -1,8 +1,11 @@
+/*
 package com.newlandframework.rpc.bootclient.schedul;
 
+*/
 /**
  * Created by Huang Jianhai on 2018/6/15.
- */
+ *//*
+
 
 import com.newlandframework.rpc.bootclient.RpcClientStart;
 import com.newlandframework.rpc.bootclient.services.ReqDatasManage;
@@ -16,16 +19,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+*/
 /**
  * 实际执行任务的业务类,需要实现Job接口
  * @remark
- */
+ *//*
+
 public class JobOne implements Job {
     private Logger logger = LoggerFactory.getLogger(JobOne.class);
     //private boolean running = false;
-    /**
+    */
+/**
      * 执行任务的方法
-     */
+     *//*
+
     public void execute(JobExecutionContext context) throws JobExecutionException {
         try{
             if(QuartzUtil.running){
@@ -58,3 +65,4 @@ public class JobOne implements Job {
 
     }
 }
+*/

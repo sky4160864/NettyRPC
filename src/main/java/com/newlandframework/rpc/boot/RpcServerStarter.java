@@ -29,7 +29,7 @@ public class RpcServerStarter {
         if(!Bootinit.getInstance().flag){
             return;
         }
-        new ClassPathXmlApplicationContext("classpath:rpc-invoke-config-server.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:rpc-invoke-config-server.xml");
     }
 }
 

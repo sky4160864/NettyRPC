@@ -43,7 +43,7 @@ public class MessageSendChannelInitializer extends ChannelInitializer<SocketChan
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
-        pipeline.addLast("ping", new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS));
+        pipeline.addLast("ping", new IdleStateHandler(0, 30, 0, TimeUnit.SECONDS));
         frame.select(protocol, pipeline);
     }
 }

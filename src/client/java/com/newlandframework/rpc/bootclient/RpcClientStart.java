@@ -2,7 +2,7 @@ package com.newlandframework.rpc.bootclient;
 
 
 import com.newlandframework.rpc.boot.Bootinit;
-import com.newlandframework.rpc.bootclient.schedul.QuartzUtil;
+//import com.newlandframework.rpc.bootclient.schedul.QuartzUtil;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,11 @@ public class RpcClientStart {
 
         context = new ClassPathXmlApplicationContext("classpath:spring-rpc-client-config.xml");
         System.out.println("=====VERSION[0.2]=====");
-        QuartzUtil.jobStart();
+        //QuartzUtil.jobStart();
+        //TimeUnit.MILLISECONDS.sleep(5000);
+        //context.destroy();
+
+
     }
 
     /**

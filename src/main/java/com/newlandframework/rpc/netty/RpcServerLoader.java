@@ -26,6 +26,7 @@ import com.newlandframework.rpc.core.RpcSystemConfig;
 import com.newlandframework.rpc.parallel.RpcThreadPool;
 
 import com.newlandframework.rpc.spring.PropertyPlaceholder;
+import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 
@@ -127,8 +128,15 @@ public class RpcServerLoader {
     public void setMessageSendHandler() {
         try {
             lock.lock();
-            this.messageSendHandler = null;
+            if(this.messageSendHandler!=null){
+                Channel channel = this.messageSendHandler.getChannel();
+                if(channel!=null){
+                    //if(channel!=null&&channel.isOpen()){
+                    channel.close();
+                }
+            }
         } finally {
+            this.messageSendHandler = null;
             lock.unlock();
         }
     }
@@ -168,7 +176,10 @@ public class RpcServerLoader {
     }
 
     public void unLoad() {
-        messageSendHandler.close();
+        if(messageSendHandler!=null){
+            messageSendHandler.close();
+        }
+
         threadPoolExecutor.shutdown();
         eventLoopGroup.shutdownGracefully();
     }

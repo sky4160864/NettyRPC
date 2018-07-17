@@ -4,8 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-
-<bean id="dataSource" name="dataSource"
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+        <property name="resultSetLogEnabled" value="false" />
+    </bean>
+    <bean id="dataSource" name="dataSource"
           class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" init-method="init">
         <!--<property name="driverClassName" value="${driverClassName}" />-->
         <property name="url" value="${jdbc_url}" />
@@ -13,7 +15,12 @@
         <property name="password" value="${jdbc_password}" />
 
         <property name="connectionProperties" value="config.decrypt=false"/>
-        <property name="filters" value="stat" />
+        <property name="filters" value="stat,slf4j" />
+        <property name="proxyFilters">
+            <list>
+                <ref bean="log-filter"/>
+            </list>
+        </property>
 
         <!-- 配置初始化大小、最小、最大 -->
         <property name="initialSize" value="${jdbc_initialSize}" />
@@ -36,7 +43,7 @@
         <!--建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。-->
         <property name="testWhileIdle" value="true" />
         <!--申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。-->
-        <property name="testOnBorrow" value="false" />
+        <property name="testOnBorrow" value="true" />
         <property name="testOnReturn" value="false" />
         <!--连接池中的minIdle数量以内的连接，空闲时间超过minEvictableIdleTimeMillis，则会执行keepAlive操作。-->
         <property name="keepAlive" value="false" />

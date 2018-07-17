@@ -1,36 +1,25 @@
-/*
 package com.newlandframework.rpc.bootclient.schedul;
-
 
 import com.newlandframework.rpc.bootclient.RpcClientStart;
 import com.newlandframework.rpc.bootclient.services.ReqDatasManage;
 import com.newlandframework.rpc.netty.RpcServerLoader;
 import com.newlandframework.rpc.services.ReqMiddleDatasManage;
-import com.newlandframework.rpc.services.pojo.ReqMiddleDatas;
-import com.newlandframework.rpc.services.pojo.ResMiddleDatas;
 import com.newlandframework.rpc.spring.PropertyPlaceholder;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-*/
 /**
- * 实际执行任务的业务类,需要实现Job接口
- * @remark
- *//*
-
-public class JobTwo implements Job {
-    private static Logger logger = LoggerFactory.getLogger(JobTwo.class);
-    */
-/**
-     * 执行任务的方法
-     *//*
-
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+ * Created by Huang Jianhai on 2018/7/16.
+ */
+@Service
+@PropertySource(value = "file:${user.dir}/rpc-client.properties")
+public class Task2 {
+    private Logger logger = LoggerFactory.getLogger(Task2.class);
+    @Scheduled(cron = "${job2_expression}")
+    public void run(){
         if(!RpcServerLoader.getInstance().getMessageSendStatus()){
             logger.info("==========NOT CONNECT SERVER==========");
             return;
@@ -50,4 +39,3 @@ public class JobTwo implements Job {
         logger.info("==========compare datas end {}==========",System.currentTimeMillis()-btime);
     }
 }
-*/

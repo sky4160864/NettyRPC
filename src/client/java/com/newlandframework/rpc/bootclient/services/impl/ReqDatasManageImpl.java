@@ -128,7 +128,7 @@ public class ReqDatasManageImpl implements ReqDatasManage {
             }
         }catch (InvokeTimeoutException e){
             logger.error("[InvokeTimeoutException]{} Cost:{}", reqObj,System.currentTimeMillis() - btime);
-            RpcServerLoader.getInstance().reLoad();
+            //RpcServerLoader.getInstance().reLoad();
         }
     }
 
