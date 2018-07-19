@@ -35,16 +35,35 @@ ST:21企业 29污水处理厂
 5.09测试OK
 
 
-1.拷贝java版本，环境配置
+
+1.  解压java到当前路径
+    拷贝java版本，环境配置(设置环境变量)
     EXE4J_HOME  E:\hac\Java\jre1.8.0_161_x86
 
 2.创建表
+create index T_ENT_SHURU_NK on T_ENT_SHURU (T_STATION_ID, DATA);
 create table SKPW_REPLACE
 (
   old_mn  VARCHAR2(30),
   new_mn  VARCHAR2(30),
-  rp_desc VARCHAR2(30)
+  rp_desc VARCHAR2(50)
 );
+
+
+    ##老的中间库拷贝   PLSQL(hac_emos2) 市平台
+    select old_mn,new_mn,ent_name from skpw_replace t
+
+    ##删除多余配置
+    delete from skpw_replace where old_mn in (
+    select a.old_mn from skpw_replace a,t_station_info b where a.old_mn=b.t_station_id(+)
+    and b.t_station_id is null)
+
+    ##创建唯一索引
+    create unique index SKPW_REPLACE_UK on SKPW_REPLACE (old_mn);
+
+    ##查重复记录
+    select t.*, t.rowid from skpw_replace t where old_mn='3304813005330481'
+    select old_mn from skpw_replace group by old_mn having count(1)>1
 
 3.清表  truncate table t_ent_shuru_status
 

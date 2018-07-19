@@ -48,6 +48,12 @@ public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        logger.info("{} connect:{}",ctx.channel().remoteAddress().toString(),RpcServerLoader.connectNumbers.incrementAndGet());
+        ctx.fireChannelActive();
+    }
+
+    @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         //System.out.println("----userEventTriggered----"+new Date());
         if (evt instanceof IdleStateEvent) {
@@ -80,7 +86,7 @@ public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        logger.info("[channelInactive]{}",ctx.channel().remoteAddress().toString());
+        logger.info("{} disconnect:{}",ctx.channel().remoteAddress().toString(),RpcServerLoader.connectNumbers.decrementAndGet());
         super.channelInactive(ctx);
     }
 

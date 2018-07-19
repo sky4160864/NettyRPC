@@ -15,7 +15,12 @@
  */
 package com.newlandframework.rpc.boot;
 
+import com.newlandframework.rpc.netty.RpcServerLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author tangjie<https://github.com/tang-jie>
@@ -25,11 +30,44 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @since 2016/10/7
  */
 public class RpcServerStarter2 {
-    public static void main(String[] args) {
-        if(!Bootinit.getInstance().flag){
+    private static Logger logger = LoggerFactory.getLogger(RpcServerStarter2.class);
+    static ClassPathXmlApplicationContext context;
+    public static void main(String[] args){
+        if(!Bootinit.init()){
             return;
         }
-        new ClassPathXmlApplicationContext("classpath:srping-rpc-invoke-config-server.xml");
+        init();
+        new Thread(()->{
+            int errNum = 0;
+            while (true){
+                try {
+                    logger.info("connect:{}",RpcServerLoader.connectNumbers.get());
+                    boolean netState = NetState.isConnect("10.33.100.34");
+                    if(!netState){
+                        errNum++;
+                        if(errNum>10&&RpcServerLoader.connectNumbers.get()==0){
+                            destroy();
+                            errNum = 0;
+                            init();
+                        }
+                    }
+                    TimeUnit.MILLISECONDS.sleep(60*1000);
+                } catch (Exception e) {
+                    logger.error("{}",e.fillInStackTrace());
+                }
+            }
+        }).start();
     }
+
+    public static void init(){
+        context = new ClassPathXmlApplicationContext("classpath:srping-rpc-invoke-config-server.xml");
+        logger.error("Server init");
+    }
+
+    public static void  destroy(){
+        context.destroy();
+        logger.error("Server destroy");
+    }
+
 }
 

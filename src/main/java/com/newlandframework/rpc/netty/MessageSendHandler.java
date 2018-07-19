@@ -85,13 +85,7 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.WRITER_IDLE) {
-                //if(currentTime <= TRY_TIMES){
-                //    System.out.println(currentTime+"----Heart----"+new Date());
-                //    currentTime++;
-                    ctx.channel().writeAndFlush(heartBeat).addListener(
-                            ChannelFutureListener.CLOSE_ON_FAILURE);
-                //}
-
+                ctx.channel().writeAndFlush(heartBeat).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
             }
         }
     }

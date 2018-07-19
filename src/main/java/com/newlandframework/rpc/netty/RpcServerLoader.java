@@ -32,6 +32,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -59,6 +61,8 @@ public class RpcServerLoader {
     private Lock lock = new ReentrantLock();
     private Condition connectStatus = lock.newCondition();
     private Condition handlerStatus = lock.newCondition();
+
+    public static AtomicInteger connectNumbers = new AtomicInteger(0);//连接数
 
     private RpcServerLoader() {
     }
@@ -167,11 +171,20 @@ public class RpcServerLoader {
     }
 
     public void reLoad(){
-        setMessageSendHandler();
-        String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
-        String protocol = PropertyPlaceholder.getProperty("rpc.server.protocol","PROTOSTUFFSERIALIZE");
-        if(ipAddr!=null&&protocol!=null){
-            load(ipAddr,RpcSerializeProtocol.valueOf(protocol));
+        try {
+            lock.lock();
+            if(messageSendHandler != null){
+                setMessageSendHandler();
+                TimeUnit.MILLISECONDS.sleep(5*60*1000);
+                String ipAddr = PropertyPlaceholder.getProperty("rpc.server.addr");
+                String protocol = PropertyPlaceholder.getProperty("rpc.server.protocol","PROTOSTUFFSERIALIZE");
+                if(ipAddr!=null&&protocol!=null){
+                    load(ipAddr,RpcSerializeProtocol.valueOf(protocol));
+                }
+            }
+        } catch (InterruptedException e) {
+        } finally {
+            lock.unlock();
         }
     }
 

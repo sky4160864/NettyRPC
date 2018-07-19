@@ -17,4 +17,9 @@ public class NanoTest {
             System.out.println(end-start);
         }
     }
+
+    @Test
+    public void mathlog(){
+        System.out.println(Math.round(Math.floor(Math.log10(99000))));
+    }
 }
