@@ -23,7 +23,7 @@ public interface ReqMiddleDatasManage {
 
     ResMiddleDatas query(ReqMiddleDatas req);
 
-    //String testWhileIdle(String msg);
+    void testWhileIdle();
 
     //void testWhileIdle();
 

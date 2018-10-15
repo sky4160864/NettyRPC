@@ -1,6 +1,5 @@
 package com.newlandframework.test.quartz;
 
-import com.newlandframework.rpc.bootclient.schedul.QuartzUtil;
 import org.junit.Test;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;

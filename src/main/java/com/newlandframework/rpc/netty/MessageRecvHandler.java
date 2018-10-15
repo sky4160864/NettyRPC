@@ -15,7 +15,11 @@
  */
 package com.newlandframework.rpc.netty;
 
+import com.newlandframework.rpc.bootclient.RpcClientStart;
 import com.newlandframework.rpc.core.RpcSystemConfig;
+import com.newlandframework.rpc.hac.VersionCtl;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -27,6 +31,7 @@ import com.newlandframework.rpc.model.MessageRequest;
 import com.newlandframework.rpc.model.MessageResponse;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +69,7 @@ public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
                 if (loss_connect_time > 2) {
                     logger.error("[No Heart Close]{}",ctx.channel().remoteAddress().toString());
                     ctx.channel().close();
+                    ctx.close();
                 }
             }
         } else {
@@ -73,15 +79,34 @@ public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        MessageRequest request = (MessageRequest) msg;
-        //心跳
-        if(RpcSystemConfig.HEART_BEAT.equals(request.getClassName())){
-            return;
+        try {
+            MessageRequest request = (MessageRequest) msg;
+            loss_connect_time = 0;
+            //心跳
+            if(RpcSystemConfig.HEART_BEAT.equals(request.getClassName())){
+                return;
+            }
+            if(request.getClassName().startsWith("version")){
+                if(!RpcClientStart.RPC_VERSION.equals(request.getClassName())){
+                    String remoteAddress = ctx.channel().remoteAddress().toString().split(":")[0];
+                    if(!VersionCtl.versionMap.containsKey(remoteAddress)){
+                        VersionCtl.getLog().info("[VERSION ERR] {}:{}",request.getClassName(),remoteAddress);
+                    }
+                }
+                return;
+            }
+
+            MessageResponse response = new MessageResponse();
+            if(request.getMessageId()==null){
+                logger.error("[MessageId NULL]{}  CLS:{}",ctx.channel().remoteAddress().toString(),request.getClassName());
+                return;
+            }
+            RecvInitializeTaskFacade facade = new RecvInitializeTaskFacade(request, response, handlerMap);
+            Callable<Boolean> recvTask = facade.getTask();
+            MessageRecvExecutor.submit(recvTask, ctx, request, response);
+        }finally {
+            ReferenceCountUtil.release(msg);//手动释放
         }
-        MessageResponse response = new MessageResponse();
-        RecvInitializeTaskFacade facade = new RecvInitializeTaskFacade(request, response, handlerMap);
-        Callable<Boolean> recvTask = facade.getTask();
-        MessageRecvExecutor.submit(recvTask, ctx, request, response);
     }
 
     @Override

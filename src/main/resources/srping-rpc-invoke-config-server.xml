@@ -9,9 +9,17 @@
     <!--<context:property-placeholder location="classpath:rpc-server.properties"/>
     <import resource="classpath:spring-druid.xml"/>-->
     <context:property-placeholder location="file:${user.dir}/rpc-server.properties"/>
-    <import resource="file:${user.dir}/spring-druid.xml"/>
+   <!-- <import resource="file:${user.dir}/spring-druid.xml"/>-->
+    <import resource="file:${user.dir}/spring-c3p0.xml"/>
 
     <bean id="beanFactory" class="com.newlandframework.rpc.spring.BeanFactoryUtils"/>
+
+    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${driverClassName}"></property>
+        <property name="jdbcUrl" value="${jdbc_url}" />
+        <property name="user" value="${jdbc_username}" />
+        <property name="password" value="${jdbc_password}" />
+    </bean>-->
 
     <!--HAC START-->
     <nettyrpc:service id="midDatasService" interfaceName="com.newlandframework.rpc.services.ReqMiddleDatasManage"

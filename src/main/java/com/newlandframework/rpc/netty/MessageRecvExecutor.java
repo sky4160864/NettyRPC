@@ -55,6 +55,10 @@ import com.newlandframework.rpc.compiler.AccessAdaptiveProvider;
 import com.newlandframework.rpc.core.AbilityDetailProvider;
 import com.newlandframework.rpc.netty.resolver.ApiEchoResolver;
 
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -67,7 +71,7 @@ import org.springframework.context.ApplicationContextAware;
  * @since 2016/10/7
  */
 public class MessageRecvExecutor implements ApplicationContextAware {
-
+    private static Logger logger = LoggerFactory.getLogger(MessageRecvExecutor.class);
     private String serverAddress;
     private int echoApiPort;
     private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDKSERIALIZE;
@@ -79,9 +83,12 @@ public class MessageRecvExecutor implements ApplicationContextAware {
     private Map<String, Object> handlerMap = new ConcurrentHashMap<String, Object>();
     private int numberOfEchoThreadsPool = 1;
 
+
     ThreadFactory threadRpcFactory = new NamedThreadFactory("NettyRPC ThreadFactory");
     EventLoopGroup boss = new NioEventLoopGroup();
     EventLoopGroup worker = new NioEventLoopGroup(PARALLEL, threadRpcFactory, SelectorProvider.provider());
+
+    //final ExecutorService executor = Executors.newFixedThreadPool(numberOfEchoThreadsPool);
 
     private MessageRecvExecutor() {
         handlerMap.clear();
@@ -119,7 +126,8 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 
             @Override
             public void onFailure(Throwable t) {
-                t.printStackTrace();
+                //t.printStackTrace();
+                logger.error("[RPC Server Send Failure]{}",ctx.channel().remoteAddress().toString());
             }
         }, threadPoolExecutor);
     }
@@ -149,6 +157,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
             bootstrap.group(boss, worker).channel(NioServerSocketChannel.class)
                     .childHandler(new MessageRecvChannelInitializer(handlerMap).buildRpcSerializeProtocol(serializeProtocol))
                     .option(ChannelOption.SO_BACKLOG, 128)
+                    .handler(new LoggingHandler(LogLevel.INFO))
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
             String[] ipAddr = serverAddress.split(MessageRecvExecutor.DELIMITER);
@@ -156,9 +165,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
             if (ipAddr.length == RpcSystemConfig.IPADDR_OPRT_ARRAY_LENGTH) {
                 final String host = ipAddr[0];
                 final int port = Integer.parseInt(ipAddr[1]);
-                ChannelFuture future = null;
-                future = bootstrap.bind(host, port).sync();
-
+                ChannelFuture future = bootstrap.bind(host, port).sync();
                 future.addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(final ChannelFuture channelFuture) throws Exception {
@@ -167,12 +174,13 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                             ExecutorCompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(executor);
                             completionService.submit(new ApiEchoResolver(host, echoApiPort));
                             System.out.printf("[author tangjie] Netty RPC Server start success!\nip:%s\nport:%d\nprotocol:%s\nstart-time:%s\njmx-invoke-metrics:%s\n\n", host, port, serializeProtocol, ModuleMetricsHandler.getStartTime(), (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT ? "open" : "close"));
-                            channelFuture.channel().closeFuture().sync().addListener(new ChannelFutureListener() {
+                            //参考https://blog.csdn.net/yu757371316/article/details/78920066
+                            /*channelFuture.channel().closeFuture().sync().addListener(new ChannelFutureListener() {
                                 @Override
                                 public void operationComplete(ChannelFuture future) throws Exception {
                                     executor.shutdownNow();
                                 }
-                            });
+                            });*/
                         }
                     }
                 });
@@ -225,4 +233,8 @@ public class MessageRecvExecutor implements ApplicationContextAware {
     public void setEchoApiPort(int echoApiPort) {
         this.echoApiPort = echoApiPort;
     }
+
+    //public ExecutorService getExecutor(){
+    //    return executor;
+    //}
 }

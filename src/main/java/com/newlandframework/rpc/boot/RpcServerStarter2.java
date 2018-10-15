@@ -15,11 +15,18 @@
  */
 package com.newlandframework.rpc.boot;
 
+import com.newlandframework.rpc.bootclient.schedul.Task1;
+import com.newlandframework.rpc.hac.*;
 import com.newlandframework.rpc.netty.RpcServerLoader;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,43 +38,34 @@ import java.util.concurrent.TimeUnit;
  */
 public class RpcServerStarter2 {
     private static Logger logger = LoggerFactory.getLogger(RpcServerStarter2.class);
-    static ClassPathXmlApplicationContext context;
+    public static ClassPathXmlApplicationContext context;
+
     public static void main(String[] args){
         if(!Bootinit.init()){
             return;
         }
         init();
-        new Thread(()->{
-            int errNum = 0;
-            while (true){
-                try {
-                    logger.info("connect:{}",RpcServerLoader.connectNumbers.get());
-                    boolean netState = NetState.isConnect("10.33.100.34");
-                    if(!netState){
-                        errNum++;
-                        if(errNum>10&&RpcServerLoader.connectNumbers.get()==0){
-                            destroy();
-                            errNum = 0;
-                            init();
-                        }
-                    }
-                    TimeUnit.MILLISECONDS.sleep(60*1000);
-                } catch (Exception e) {
-                    logger.error("{}",e.fillInStackTrace());
-                }
-            }
-        }).start();
+        ScheduleUtil.addJob("job2", "trigger2", JobTwo.class,"0 * * * * ?");
+        ScheduleUtil.addJob("job3", "trigger3", JobThree.class,"0/30 * * * * ?");
+        //ScheduleUtil.addJob("job1", "trigger1", JobOne.class,"0 0 * * * ?");
     }
 
     public static void init(){
         context = new ClassPathXmlApplicationContext("classpath:srping-rpc-invoke-config-server.xml");
-        logger.error("Server init");
+        logger.info("Server init");
     }
 
     public static void  destroy(){
         context.destroy();
-        logger.error("Server destroy");
+        logger.info("Server destroy");
     }
+
+   /* class Task1 implements Job{
+        public void execute(JobExecutionContext context) throws JobExecutionException {
+            logger.info("[Memory]{}", RuntimeUtil.getMemory("hacMidServer.exe"));
+        }
+    }*/
+
 
 }
 

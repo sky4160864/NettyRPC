@@ -1,4 +1,6 @@
 /*
+import com.newlandframework.rpc.spring.PropertyPlaceholder;
+import org.slf4j.LoggerFactory;
 package com.newlandframework.rpc.bootclient.schedul;
 
 import com.newlandframework.rpc.spring.PropertyPlaceholder;
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 
+
 */
 /**
  * 任务调度公共类
@@ -17,6 +20,13 @@ import org.springframework.beans.factory.annotation.Value;
  * @author iaiai QQ:176291935
  * @time 2015-3-23下午3:04:12
  *//*
+
+
+import com.newlandframework.rpc.spring.PropertyPlaceholder;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class QuartzUtil {
 
@@ -38,7 +48,8 @@ public class QuartzUtil {
         //log.info("==JOB3_EXPRESSION: {}",JOB3_EXPRESSION);
         log.info("============================================");
     }
-    */
+
+*/
 /**
      * 添加任务的方法
      *
@@ -50,6 +61,7 @@ public class QuartzUtil {
      *            执行任务的类
      * @throws SchedulerException
      *//*
+
 
     public static void addJob(String jobName, String triggerName, Class<? extends Job> jobClass,String cronExpression)
             throws SchedulerException {
@@ -74,7 +86,8 @@ public class QuartzUtil {
     }
 
 
-    */
+
+*/
 /**
      * 添加任务的方法
      *
@@ -89,7 +102,10 @@ public class QuartzUtil {
      * @throws SchedulerException
      *//*
 
-    public static void addJob(String jobName, String triggerName, Class<? extends Job> jobClass,int seconds)
+
+import org.quartz.Job;
+
+public static void addJob(String jobName, String triggerName, Class<? extends Job> jobClass, int seconds)
     {
         try{
             // 创建一个SchedulerFactory工厂实例
@@ -125,4 +141,5 @@ public class QuartzUtil {
     }
 
 }
+
 */

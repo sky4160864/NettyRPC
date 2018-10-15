@@ -1,6 +1,5 @@
 package com.newlandframework.rpc.services.impl;
 
-import com.newlandframework.rpc.bootclient.schedul.JobOne;
 import com.newlandframework.rpc.services.ReqMiddleDatasManage;
 import com.newlandframework.rpc.services.pojo.MiddleData;
 import com.newlandframework.rpc.services.pojo.ReqMiddleDatas;
@@ -17,8 +16,9 @@ import java.util.List;
  * Created by Huang Jianhai on 2018/6/14.
  */
 public class ReqMiddleDatasManageImpl implements ReqMiddleDatasManage {
-    private Logger logger = LoggerFactory.getLogger(ReqMiddleDatasManageImpl.class);
-    private DataSource dataSource;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    //private DataSource dataSource;
+    private JdbcTemplate template ;
 
     private String sql1 = "select to_char(MONITORTIME,'yyyymmddhh24miss') as mtime,to_char(EXCHANGETIME,'yyyymmddhh24miss') as extime," +
             "AVGFLOW||'' as avgflow ,COD||'' as val1,NH3||'' as val2 from PS_Water_Hour_Data where  outputcode=?" +
@@ -47,12 +47,12 @@ public class ReqMiddleDatasManageImpl implements ReqMiddleDatasManage {
             " and MONITORTIME<to_date(?,'yyyymmddhh24miss')" ;
 
     public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this.template = new JdbcTemplate(dataSource);
+        //this.dataSource = dataSource;
     }
 
     @Override
     public ResMiddleDatas query(ReqMiddleDatas req) {
-        JdbcTemplate template = new JdbcTemplate(this.dataSource);
         try {
             List<MiddleData> list = null;
             //请求数据 ST:01企业 09污水处理厂
@@ -94,6 +94,11 @@ public class ReqMiddleDatasManageImpl implements ReqMiddleDatasManage {
             logger.error(e.getMessage());
         }
         return new ResMiddleDatas(-1,req,null);
+    }
+
+
+    public void testWhileIdle(){
+        template.queryForObject("select 1 from dual",Integer.class);
     }
 
     /*public String testWhileIdle(String msg){

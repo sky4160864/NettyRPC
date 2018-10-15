@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+        <property name="resultSetLogEnabled" value="false" />
+    </bean>
+    <bean id="dataSource" name="dataSource"
+          class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" init-method="init">
+        <!--<property name="driverClassName" value="${driverClassName}" />-->
+        <property name="url" value="${jdbc_url}" />
+        <property name="username" value="${jdbc_username}" />
+        <property name="password" value="${jdbc_password}" />
+
+        <property name="connectionProperties" value="config.decrypt=false"/>
+        <property name="filters" value="stat,slf4j" />
+        <property name="proxyFilters">
+            <list>
+                <ref bean="log-filter"/>
+            </list>
+        </property>
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${jdbc_initialSize}" />
+        <property name="minIdle" value="${jdbc_minIdle}" />
+        <property name="maxActive" value="${jdbc_maxActive}" />
+        <!-- 配置获取连接等待超时的时间 取连接时最大等待时间，单位毫秒。
+        配置了maxWait之后， 缺省启用公平锁，并发效率会有所下降， 如果需要可以通过配置useUnfairLock属性为true使用非公平锁。-->
+        <!--<property name="maxWait" value="60000" />-->
+
+        <!-- 有两个含义：默认一分钟，单位是毫秒
+            1) Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接。
+            2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!--连接保持空闲而不被驱逐的最小时间-->
+        <property name="minEvictableIdleTimeMillis" value="60000" />
+
+    <!-- 验证连接有效与否的SQL，不同的数据配置不同 （配置文件中设置）-->
+    <property name="validationQuery" value="select 1 from dual" />
+        <!--建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。-->
+        <property name="testWhileIdle" value="true" />
+        <!--申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。-->
+        <property name="testOnBorrow" value="true" />
+        <property name="testOnReturn" value="false" />
+        <!--连接池中的minIdle数量以内的连接，空闲时间超过minEvictableIdleTimeMillis，则会执行keepAlive操作。-->
+        <property name="keepAlive" value="false" />
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="sqlTxManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="sqlTxManager"/>
+</beans>

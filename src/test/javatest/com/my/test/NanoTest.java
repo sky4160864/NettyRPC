@@ -22,4 +22,10 @@ public class NanoTest {
     public void mathlog(){
         System.out.println(Math.round(Math.floor(Math.log10(99000))));
     }
+
+    @Test
+    public void te(){
+        String ss="version";
+        System.out.println(ss.startsWith("version"));
+    }
 }

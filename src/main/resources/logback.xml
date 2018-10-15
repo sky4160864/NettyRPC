@@ -81,7 +81,7 @@
     </appender>-->
 
     <!--独立日志-->
-    <appender name="filePingLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="fileSingleLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <!--&lt;!&ndash;要拦截的日志级别&ndash;&gt;
             <level>INFO</level>
@@ -96,7 +96,7 @@
         <!--滚动策略-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
-            <fileNamePattern>logs/ping/ping-%d.log</fileNamePattern>
+            <fileNamePattern>logs/single/single-%d.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
@@ -123,9 +123,9 @@
     <!--<logger name="ch.qos.logback" level="ERROR" />-->
     <logger name="com.alibaba.druid"/>
     <logger name="org.springframework" level="ERROR" />
-    <!--<logger name="org.quartz" level="ERROR" />-->
-    <logger name="com.newlandframework.rpc.boot.NetState" level="INFO" addtivity="false">
-        <appender-ref ref="filePingLog"/>
+    <logger name="org.quartz" level="ERROR" />
+    <logger name="com.newlandframework.rpc.hac.VersionCtl" level="INFO" addtivity="false">
+        <appender-ref ref="fileSingleLog"/>
     </logger>
 
 

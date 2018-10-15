@@ -45,8 +45,8 @@ public class StopWatchTest {
             try {
                 signal.await();
                 int timeout = new Random().nextInt(2000);
-                System.out.println(Thread.currentThread().getName() +"-"+id+"-sleep:"+timeout);
-                TimeUnit.MILLISECONDS.sleep(timeout);
+                System.out.println(Thread.currentThread().getName() +"-"+id+"-sleep:"+timeout+"  :"+get(id));
+                //TimeUnit.MILLISECONDS.sleep(timeout);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -56,4 +56,16 @@ public class StopWatchTest {
 
         }
     }
+
+    public static int get(int id){
+        if(id==4){
+            try {
+                TimeUnit.SECONDS.sleep(id);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return id*10;
+    }
+
 }

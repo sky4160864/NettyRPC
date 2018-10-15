@@ -15,6 +15,7 @@
  */
 package com.newlandframework.rpc.netty;
 
+import com.newlandframework.rpc.bootclient.RpcClientStart;
 import com.newlandframework.rpc.core.RpcSystemConfig;
 import com.newlandframework.rpc.serialize.RpcSerializeProtocol;
 import com.newlandframework.rpc.spring.PropertyPlaceholder;
@@ -70,7 +71,8 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         this.remoteAddr = this.channel.remoteAddress();
-        heartBeat.setClassName(RpcSystemConfig.HEART_BEAT);
+        //heartBeat.setClassName(RpcSystemConfig.HEART_BEAT);
+        heartBeat.setClassName(RpcClientStart.RPC_VERSION);
     }
 
     @Override
